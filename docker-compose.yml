@@ -1,0 +1,10 @@
+version: '3'
+services:
+  sparkplan-web:
+    build:
+      context: ./
+    ports:
+      - "3333:3000"
+    environment:
+      NODE_ENV: development
+
