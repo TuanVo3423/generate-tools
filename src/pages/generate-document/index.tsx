@@ -1,5 +1,5 @@
 import { SEO } from '@/components';
-import Home from '@/features/Home';
+import { GenerateDocument } from '@/features';
 import { MainLayout } from '@/layouts';
 import { NextPageWithLayout } from '@/types';
 import { Box } from '@chakra-ui/react';
@@ -7,25 +7,25 @@ import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { ReactElement } from 'react';
 
-const HomePage: NextPageWithLayout = () => {
+const GenerateDocumentPage: NextPageWithLayout = () => {
   return (
-    <Box color="red">
+    <Box>
       <SEO
         data={{
-          title: '',
+          title: 'Generate Document',
           description:
             'Help you have all the necessary knowledge to become a Fresher NextJS!',
           url: '',
           thumbnailUrl: '',
         }}
       />
-      <Home />
+      <GenerateDocument />
     </Box>
   );
 };
 
-export default HomePage;
-HomePage.getLayout = function getLayout(page: ReactElement) {
+export default GenerateDocumentPage;
+GenerateDocumentPage.getLayout = function getLayout(page: ReactElement) {
   return <MainLayout>{page}</MainLayout>;
 };
 

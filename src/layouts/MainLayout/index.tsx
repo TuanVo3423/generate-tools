@@ -6,5 +6,5 @@ type Props = {
 };
 
 export const MainLayout = ({ children }: Props) => {
-  return <Box>{children}</Box>;
+  return <Box p={4}>{children}</Box>;
 };

@@ -4,7 +4,7 @@ const styles = {
   global: (props: GlobalStyleProps) => ({
     body: {
       color: mode('text.0', 'text.100')(props),
-      // backgroundColor: mode('text.800', 'text.800')(props),
+      backgroundColor: mode('text.800', 'text.800')(props),
       // fontFamily: 'Satoshi',
       // transitionProperty: 'background-color',
       // transitionDuration: 'normal',
