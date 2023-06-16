@@ -41,6 +41,7 @@
     "mermaid": "^10.1.0",
     "next": "13.2.4",
     "next-i18next": "^13.2.2",
+    "openai": "^3.2.1",
     "react": "18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
