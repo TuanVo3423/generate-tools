@@ -1,124 +1,104 @@
 import * as Yup from 'yup';
 import { UseFormReturn } from 'react-hook-form';
+import { DocumentPrompt } from '@/utils/openaiPrompt';
 import { chatGPTResquest } from '@/utils/openAIRequest';
-import { chatGPTPrompt } from '@/utils/openaiPrompt';
-import { ChatCompletionRequestMessage } from 'openai';
-import { ConvertResChatGPT } from '@/utils/convertResChatGPT';
-
-// handle init value of form
-// handle check validator using yup
-
-export interface IFeature {
-  id: number;
-  content: string;
-  options: Array<IOption>;
-}
+import MarkdownIt from 'markdown-it';
 
 export interface IOption {
   id: string;
+  questionId: string;
+  checked: boolean;
   content: string;
 }
 
+export interface IQuestion {
+  id: string;
+  content: string;
+}
 export interface IDefaultValue {
   name: string;
-  type: string;
-  features: Array<IFeature>;
-  step: string;
-  currentFeatureSelected: any;
-  featuresSelected: Array<FeaturesSelected>;
-}
-
-export type FeaturesSelected = {
-  id: string;
+  description: string;
+  questions: Array<IQuestion>;
   options: Array<IOption>;
-};
+  step: string;
+  htmlDocument: string;
+}
 
 export const DefaultValue: IDefaultValue = {
   name: '',
-  type: '',
-  features: [],
-  featuresSelected: [],
-  currentFeatureSelected: {},
-  step: 'askType',
+  description: '',
+  questions: [],
+  options: [],
+  htmlDocument: '',
+  step: 'askName',
 };
 
 export const schema = Yup.object({});
 
 export const handleSubmitForm = async ({
-  currentOptionId,
-  values,
   form,
-  answer,
+  values,
 }: {
-  currentOptionId: string;
   values: IDefaultValue;
   form: UseFormReturn<any>;
-  answer: string;
 }) => {
-  // khi nhan thi value la askName
-  // khi nhan thi value la
-  const {
-    step,
-    name,
-    type,
-    features,
-    featuresSelected,
-    currentFeatureSelected,
-  } = values;
-  // console.log('step', step);
+  const { step, description, name, options, questions } = values;
   const { setValue } = form;
-  if (step === 'askType') {
-    setValue('type', answer);
-    setValue('step', 'askName');
-  }
-  if (step === 'askName') {
-    setValue('name', answer);
-    setValue('step', 'askFeature');
-    const content = chatGPTPrompt(type, name);
-    const promptResquest: ChatCompletionRequestMessage[] = [
+  if (step === 'generateDocument') {
+    const optionsObject = questions.map((question) => {
+      const matchingOptions = options.filter(
+        (option) => option.questionId === question.id && option.checked
+      );
+      const optionsContent = matchingOptions.map(
+        (matchingOption) => matchingOption.content
+      );
+      return {
+        content: question.content,
+        options: optionsContent.join(''),
+        // 'Answer: ' +
+      };
+    });
+    const promptGenerateDocument = DocumentPrompt(
+      name,
+      description,
+      optionsObject
+    );
+    const response = await chatGPTResquest([
       {
         role: 'user',
-        content,
-      },
-    ];
-    const response = await chatGPTResquest(promptResquest);
-    const convertedData = await ConvertResChatGPT(response?.content || '');
-    // console.log(convertedData);
-    setValue('features', convertedData);
-  }
-  // you are current at askName and when you click submit, it will handle the value and return setValue = askOptions
-  // dang ask name -> nhan send -> askOptions
-  if (step === 'askFeature') {
-    if (features.length === 0) {
-      console.log(featuresSelected);
-    }
-    // khi chon thi se chon id cua feature dua vao stt
-    const featureSelected = features[Number(answer)];
-
-    setValue('currentFeatureSelected', featureSelected);
-    setValue('step', 'askOptions');
-  }
-
-  if (step === 'askOptions') {
-    const arrayIdOrders = answer.split(',');
-    const optionsSelected = arrayIdOrders.map(
-      (item, idx) => currentFeatureSelected.options[Number(arrayIdOrders[idx])]
-    );
-    setValue('featuresSelected', [
-      ...featuresSelected,
-      {
-        id: currentFeatureSelected.id,
-        content: currentFeatureSelected.content,
-        options: optionsSelected,
+        content: promptGenerateDocument,
       },
     ]);
-    const featureAlive = features.filter(
-      (item) => item.id !== currentFeatureSelected.id
-    );
-    setValue('features', featureAlive);
-    setValue('currentFeatureSelected', {});
-    setValue('step', 'askFeature');
-    // select feature by id and submit form -> data will saved into optionsSelected
-    // with idOption and idListFeature
+    if (response) {
+      const md = new MarkdownIt();
+      const htmlRes = md.render(response?.content);
+      setValue('htmlDocument', htmlRes);
+    }
   }
+};
+
+export const replaceSpecialCharacters = (response: string): Array<string> => {
+  return response
+    .split(/<br\/>|<br>|<br \/>|\n/)
+    .filter(function (item) {
+      return /^\d/.test(item);
+    })
+    .map((item) => item.replace(/^\d+\.\s/, ''));
+};
+
+const isQuestionIdExists = (questionId: string, options: IOption[]) => {
+  return options.some(
+    (option: any) => option.questionId === questionId && option.checked === true
+  );
+};
+export const isReadyForRequestGeneration = (
+  questions: IQuestion[],
+  options: IOption[]
+) => {
+  if (questions.length !== 0) {
+    return questions.every((question: any) =>
+      isQuestionIdExists(question.id, options)
+    );
+  }
+  return false;
 };

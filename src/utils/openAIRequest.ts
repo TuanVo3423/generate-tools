@@ -2,13 +2,15 @@ import { ChatCompletionRequestMessage } from 'openai';
 import openai from './openai';
 
 export const chatGPTResquest = async (
-  messages: ChatCompletionRequestMessage[]
+  messages: ChatCompletionRequestMessage[],
+  maxToken?: number
 ) => {
   const completion = await openai.createChatCompletion(
     {
       model: 'gpt-3.5-turbo',
       messages: [...messages],
       temperature: 0.2,
+      max_tokens: maxToken,
     },
     {
       headers: {
