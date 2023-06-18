@@ -1,6 +1,5 @@
 import { Box, BoxProps, Flex } from '@chakra-ui/react';
 import { UseFormReturn } from 'react-hook-form';
-import { IOptions } from '../data';
 
 interface Props extends BoxProps {
   isTriangle?: boolean;
@@ -108,17 +107,3 @@ export const askName = ({ form }: askNameProps) => {
     </>
   );
 };
-
-// no la 1 feature, ben trong chua nhieu lis options
-export type askFeatureProps = {
-  option: IOptions;
-};
-// options.map() => askFeature(option)
-// 2 case
-// case next: dua vao options de list
-// neu next thi no se loai bo ra khoi options
-// case back: neu back thi no se them lai vao options
-// se co 1 bien luu cac history cua tin nhan
-// chi can luu option da chon la dc
-
-export const askFeature = () => {};

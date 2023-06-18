@@ -4,6 +4,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { appWithTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import '../theme/global.css';
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page);

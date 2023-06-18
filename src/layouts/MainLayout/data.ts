@@ -17,7 +17,7 @@ export interface INavigationProps {
   status: string;
   isNew?: boolean;
 }
- 
+
 export const NAVIGATIONS: INavigationProps[] = [
   {
     href: '/dashboard/overview',
@@ -26,7 +26,7 @@ export const NAVIGATIONS: INavigationProps[] = [
     feature: '/dashboard',
     status: 'launch',
   },
-  { 
+  {
     href: '/logo',
     title: 'logo',
     icon: MoonIcon,

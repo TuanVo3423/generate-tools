@@ -1,72 +1,41 @@
-import { Box, Button, Flex, HStack, Input } from '@chakra-ui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { DefaultValue, IDefaultValue, handleSubmitForm, schema } from './data';
-import { AskType, AskName, AskFeature, RoomChat } from './components';
+import { DefaultValue, schema, handleSubmitForm, IDefaultValue } from './data';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@chakra-ui/react';
+import { AskName, AskQuestions } from './components';
+import dynamic from 'next/dynamic';
+const GenerateDocumentComp = dynamic(
+  () => import('./components/GenerateDocument'),
+  {
+    ssr: false,
+  }
+);
 
-type Props = {};
-
-type mapping = {
-  [key in string]: 'name' | 'type' | 'features' | 'featuresSelected' | 'step';
-};
-const StringMapping: mapping = {
-  askType: 'type',
-  askName: 'name',
-  askFeature: 'features',
-  askOptions: 'featuresSelected',
-  step: 'step',
-};
-
-export function GenerateDocument({}: Props) {
-  const [text, setText] = useState('');
-  // console.log(text);
+export const GenerateDocument = () => {
   const form = useForm({
     resolver: yupResolver(schema),
     defaultValues: DefaultValue,
   });
 
-  const { control, handleSubmit, watch, setValue } = form;
-  const [features] = watch(['features']);
-
+  const { watch, handleSubmit } = form;
+  const [step] = watch(['step']);
   const onSubmit = async (values: IDefaultValue) => {
-    
-
     await handleSubmitForm({
-      values,
       form,
-      currentOptionId: '',
-      answer: text,
+      values,
     });
-    setText('');
   };
 
+  const renderApp = () => {
+    if (step === 'askName') return <AskName form={form} />;
+    if (step === 'askQuestions')
+      return <AskQuestions handleSubmit={handleSubmit(onSubmit)} form={form} />;
+  };
+  if (step === 'generateDocument') return <GenerateDocumentComp form={form} />;
+
   return (
-    <Box id="create-project" as="form" onSubmit={handleSubmit(onSubmit)}>
-      <Flex justify="flex-end" flexDir="column" minH="85vh">
-        <RoomChat form={form} />
-      </Flex>
-      <HStack>
-        <Input
-          value={text}
-          onChange={(e) => {
-            setText(e.target.value);
-          }}
-        />
-        <Button type="submit" maxW="200px">
-          Send
-        </Button>
-      </HStack>
+    <Box w="full" h="full" id="create-document">
+      {renderApp()}
     </Box>
   );
-}
-type option = {
-  id: number;
-  content: string;
 };
-
-export interface IFeature {
-  id: number;
-  content: string;
-  options: Array<option>;
-}

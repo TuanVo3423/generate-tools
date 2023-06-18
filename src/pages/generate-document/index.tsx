@@ -2,14 +2,13 @@ import { SEO } from '@/components';
 import { GenerateDocument } from '@/features';
 import { MainLayout } from '@/layouts';
 import { NextPageWithLayout } from '@/types';
-import { Box } from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { ReactElement } from 'react';
 
 const GenerateDocumentPage: NextPageWithLayout = () => {
   return (
-    <Box>
+    <>
       <SEO
         data={{
           title: 'Generate Document',
@@ -20,7 +19,7 @@ const GenerateDocumentPage: NextPageWithLayout = () => {
         }}
       />
       <GenerateDocument />
-    </Box>
+    </>
   );
 };
 
