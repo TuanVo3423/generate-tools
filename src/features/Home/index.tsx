@@ -13,7 +13,9 @@ const Home = (props: Props) => {
           Generate document
         </Button>
         <Button>Generate music</Button>
-        <Button>Generate image</Button>
+        <Button onClick={() => router.push('generate-image')}>
+          Generate image
+        </Button>
       </HStack>
     </Stack>
   );
