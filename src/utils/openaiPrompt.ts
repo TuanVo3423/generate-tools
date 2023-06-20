@@ -4,7 +4,7 @@ export const QuestionsPrompt = (description: string, name: string): string => {
   List 5 questions necessary for writing a detailed and complete Project Specifications document for this project.
   Write in a clear and concise style.
     `;
-  return prompt;
+  return prompt;  
 };
 
 export const OptionsPrompt = (question: string) => {
