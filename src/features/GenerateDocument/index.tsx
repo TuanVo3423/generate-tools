@@ -34,7 +34,7 @@ export const GenerateDocument = () => {
   if (step === 'generateDocument') return <GenerateDocumentComp form={form} />;
 
   return (
-    <Box w="full" h="full" id="create-document">
+    <Box w="full" h="full">
       {renderApp()}
     </Box>
   );

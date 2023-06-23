@@ -187,6 +187,25 @@ const Button: ComponentStyleConfig = {
         color: 'text.400',
       },
     },
+    'primary-v2': {
+      color: '#f1f0ff',
+      bgColor: 'rgba(255,255,255,.2)',
+      borderWidth: '2px',
+      borderColor: '#b1a6fc',
+      _hover: {
+        bg: 'rgba(255,255,255,.4)',
+      },
+    },
+    'secondary-v2': {
+      color: '#292f36',
+      bgColor: '#fff',
+      boxShadow:
+        '0 10px 10px -5px rgba(0,0,0,.04), 20px 0 25px -5px rgba(0,0,0,.1)',
+      _hover: {
+        color: '#392e7f',
+        bgColor: '#f1f0ff',
+      },
+    },
   },
 
   sizes: {

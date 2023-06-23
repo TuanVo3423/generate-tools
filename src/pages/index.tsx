@@ -9,12 +9,12 @@ import { ReactElement } from 'react';
 
 const HomePage: NextPageWithLayout = () => {
   return (
-    <Box color="red">
+    <Box>
       <SEO
         data={{
-          title: '',
+          title: 'Generate Your document with AI in 30 Seconds',
           description:
-            'Help you have all the necessary knowledge to become a Fresher NextJS!',
+            'AI tools builder. From curated images to AI-written content, get the professional site your business needs with none of the work. ',
           url: '',
           thumbnailUrl: '',
         }}
