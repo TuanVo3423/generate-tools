@@ -13,7 +13,7 @@ const GenerateDocumentPage: NextPageWithLayout = () => {
         data={{
           title: 'Generate Document',
           description:
-            'Help you have all the necessary knowledge to become a Fresher NextJS!',
+            'AI tools builder. From curated images to AI-written content, get the professional site your business needs with none of the work. ',
           url: '',
           thumbnailUrl: '',
         }}

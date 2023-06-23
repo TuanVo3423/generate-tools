@@ -43,3 +43,5 @@ export * from './lable-close-circle';
 export * from './issue-bug';
 export * from './issue-check';
 export * from './issue-warning';
+export * from './spark';
+export * from './menu';
