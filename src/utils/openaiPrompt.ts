@@ -4,7 +4,7 @@ export const QuestionsPrompt = (description: string, name: string): string => {
   List 5 questions necessary for writing a detailed and complete Project Specifications document for this project.
   Write in a clear and concise style.
     `;
-  return prompt;
+  return prompt;  
 };
 
 export const OptionsPrompt = (question: string) => {
@@ -38,5 +38,10 @@ export const DocumentPrompt = (
   ${convertOptionsToString}
   
   The document should be written in a clear and concise style, formatted like a standard business proposal, and include any specific terminology or language you provide. The final document should be provided in a word processing format and be a minimum of 3 pages in length. The generated document is marked using markdown.`;
+  return prompt;
+};
+
+export const ImagePrompt = (description: string) => {
+  const prompt = `${description}`;
   return prompt;
 };
