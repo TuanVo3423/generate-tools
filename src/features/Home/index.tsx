@@ -1,6 +1,5 @@
 import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { Header } from './components';
 
 const Home = () => {
   const router = useRouter();
@@ -48,7 +47,11 @@ const Home = () => {
               Get your business online today with the #1 AI website builder.
             </Text>
             <Flex justify="center">
-              <Button variant="primary-v2" maxW="200px">
+              <Button
+                onClick={() => router.push('/generate-document')}
+                variant="primary-v2"
+                maxW="200px"
+              >
                 Get Started
               </Button>
             </Flex>
