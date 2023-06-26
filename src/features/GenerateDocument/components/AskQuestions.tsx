@@ -31,7 +31,12 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
   const [id, setId] = useState<string>();
   const [isDisabledQuestion, setIsDisabledQuestion] = useState(false);
   const [currentOptions, setCurrentOptions] = useState<IOption[]>([]);
-  const [questions, options] = watch(['questions', 'options']);
+  const [questions, options, description, name] = watch([
+    'questions',
+    'options',
+    'description',
+    'name',
+  ]);
 
   const getQuestionById = (questionId?: string) => {
     if (questionId) {
@@ -69,7 +74,13 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
       } else {
         setIsDisabledQuestion(true);
         setCurrentOptions([]);
-        const promptGetOptions = OptionsPrompt(questionById[0].content);
+        const promptGetOptions = OptionsPrompt(
+          name,
+          description,
+          questionById[0].content,
+          options,
+          questions
+        );
         const optionsRes = await chatGPTResquest([
           { role: 'user', content: promptGetOptions },
         ]);
@@ -92,7 +103,13 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
     // first time
     else {
       setIsDisabledQuestion(true);
-      const promptGetOptions = OptionsPrompt(questionById[0].content);
+      const promptGetOptions = OptionsPrompt(
+        name,
+        description,
+        questionById[0].content,
+        options,
+        questions
+      );
       const optionsRes = await chatGPTResquest([
         { role: 'user', content: promptGetOptions },
       ]);
@@ -229,6 +246,7 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
       <Box>
         <Button
           mx="auto"
+          variant="primary-v2"
           maxW="200px"
           isDisabled={
             isReadyForRequestGeneration(questions, options) ? false : true

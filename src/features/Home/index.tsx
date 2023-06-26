@@ -6,7 +6,6 @@ const Home = () => {
   const router = useRouter();
   return (
     <Box w="full" h="full">
-      <Header />
       <Box
         maxW="690px"
         mx="auto"

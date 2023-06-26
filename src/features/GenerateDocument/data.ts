@@ -102,3 +102,9 @@ export const isReadyForRequestGeneration = (
   }
   return false;
 };
+
+export const getQuestionById = (questions: IQuestion[], questionId: string) => {
+  return questions.filter(
+    (question: IQuestion, idx: number) => question.id === questionId
+  )[0];
+};

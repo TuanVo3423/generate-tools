@@ -1,10 +1,10 @@
 import { SEO } from '@/components';
 import { GenerateDocument } from '@/features';
-import { MainLayout } from '@/layouts';
 import { NextPageWithLayout } from '@/types';
 import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { ReactElement } from 'react';
+import ChatLayout from './components';
 
 const GenerateDocumentPage: NextPageWithLayout = () => {
   return (
@@ -25,7 +25,7 @@ const GenerateDocumentPage: NextPageWithLayout = () => {
 
 export default GenerateDocumentPage;
 GenerateDocumentPage.getLayout = function getLayout(page: ReactElement) {
-  return <MainLayout>{page}</MainLayout>;
+  return <ChatLayout>{page}</ChatLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {

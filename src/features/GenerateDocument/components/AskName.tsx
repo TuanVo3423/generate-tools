@@ -69,16 +69,21 @@ export const AskName = ({ form }: AskNameProps) => {
         {!description && (
           <>
             <Input
+              onKeyDown={(e) => console.log(e.keyCode === 13 && handleOnSend())}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
             />
-            <Button onClick={handleOnSend} maxW="200px">
+            <Button variant="primary-v2" onClick={handleOnSend} maxW="200px">
               Send
             </Button>
           </>
         )}
         {description && (
-          <Button onClick={handleGotoAnswerQuestions} maxW="200px">
+          <Button
+            variant="primary-v2"
+            onClick={handleGotoAnswerQuestions}
+            maxW="200px"
+          >
             Continue
           </Button>
         )}

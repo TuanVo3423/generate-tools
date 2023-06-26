@@ -72,8 +72,12 @@ const GenerateDocumentComp = ({ form }: GenerateDocumentCompProps) => {
       )}
 
       <HStack justify="center" align="center">
-        <Button maxW="200px">Continue</Button>
-        <Button maxW="200px">Save</Button>
+        <Button variant="primary-v2" maxW="200px">
+          Continue
+        </Button>
+        <Button variant="secondary-v2" maxW="200px">
+          Save
+        </Button>
       </HStack>
     </Stack>
   );

@@ -1,14 +1,60 @@
+import { getQuestionById } from '@/features/GenerateDocument/data';
 export const NUMBER_OPTIONS = 4;
 export const QuestionsPrompt = (description: string, name: string): string => {
   const prompt = `The new client project is called ${name}.The project description is: ${description}. 
   List 5 questions necessary for writing a detailed and complete Project Specifications document for this project.
   Write in a clear and concise style.
     `;
-  return prompt;  
+  return prompt;
 };
 
-export const OptionsPrompt = (question: string) => {
-  const prompt = `Provide list answers for question: ${question}. Write in a clear and concise style.`;
+export const OptionsPrompt = (
+  name: string,
+  description: string,
+  question: string,
+  options: any[],
+  questions: any[]
+) => {
+  const QuestionAndAnswers = questions
+    .map((item) => {
+      const answer = options.filter(
+        (option) => option.questionId === item.id && option.checked === true
+      );
+      if (answer.length > 0) {
+        return {
+          questionName: item.content,
+          answer: answer,
+        };
+      }
+      return null; // Không trả về gì nếu không có tùy chọn cho câu hỏi này
+    })
+    .filter((item) => item !== null); // Lọc bỏ các giá trị null khỏi mảng kết quả
+  console.log(QuestionAndAnswers);
+  // console.log('options:', options);
+  // const convertOptionsToString = options
+  //   .map((option) => `Question: ${option.content} Answer: ${option.options}`)
+  //   .join('\n');
+  // ${
+  //   options.length === 0
+  //     ? ''
+  //     : `There is a list of questions and answers describing project:
+  //      ${convertOptionsToString}.`
+  // }
+  const prompt = `The project name is ${name}, described as ${description}. 
+  ${
+    QuestionAndAnswers[0] && QuestionAndAnswers[0].answer.length !== 0
+      ? 'There are some details which describing project:'
+      : ''
+  } 
+         ${QuestionAndAnswers.map((item: any, idx: number) => {
+           if (item.answer.length !== 0) {
+             return `${item.questionName} -> ${item.answer.map(
+               (test: any) => test.content
+             )}`;
+           }
+           return '';
+         })}.
+  Provide list answers for question: ${question}. Write in a clear and concise style. Each answer corresponds to the number at the beginning.Go to the main content, first line is the answers!`;
   return prompt;
 };
 

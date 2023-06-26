@@ -47,9 +47,19 @@ export const GenerateImage = (props: Props) => {
     }
   };
   return (
-    <Stack gap={10} p={10} minW="full" minH="full" justify="center">
+    <Stack
+      textAlign="center"
+      gap={10}
+      p={10}
+      minW="full"
+      minH="full"
+      justify="center"
+    >
+      <Text fontSize="2xl" fontWeight="bold">
+        Generate Image with your description
+      </Text>
       <Input value={input} onChange={(e) => setInput(e.target.value)} />
-      <Button onClick={handleSubmit} maxW="200px">
+      <Button variant="primary-v2" onClick={handleSubmit} maxW="200px">
         Generate Image
       </Button>
       <SimpleGrid columns={3} spacing={4}>

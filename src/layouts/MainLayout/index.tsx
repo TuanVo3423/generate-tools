@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import React from 'react';
+import { Header } from './components';
 
 type Props = {
   children: React.ReactNode;
@@ -7,7 +8,8 @@ type Props = {
 
 export const MainLayout = ({ children }: Props) => {
   return (
-    <Box bg="#111827" p={4} w="100vw" h="100vh" minW="100vw" minH="100vh">
+    <Box bg="#111827" p={4} minH="100vh">
+      <Header />
       {children}
     </Box>
   );
