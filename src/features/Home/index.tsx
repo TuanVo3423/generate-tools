@@ -1,9 +1,7 @@
 import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { Header } from './components';
 
 const Home = () => {
-  const router = useRouter();
   return (
     <Box w="full" h="full">
       <Box
