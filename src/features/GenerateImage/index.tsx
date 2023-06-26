@@ -1,3 +1,4 @@
+import { NUMBER_OF_IMAGE_GENERATED } from '@/constants';
 import { ImagePrompt, chatGPTResquestImage } from '@/utils';
 import {
   Box,
@@ -19,16 +20,20 @@ export const GenerateImage = (props: Props) => {
   const downloadImage = (url: string) => {
     saveAs(url, 'image.jpg');
   };
+
   const renderImage = () => {
     if (images.length !== 0)
       return (
         <>
           {images.map((image, idx) => (
-            <Stack>
+            <Stack key={idx}>
               <Box key={idx}>
                 <Image objectFit="cover" w="full" h="full" src={image.url} />
               </Box>
-              <Button onClick={() => downloadImage(image.url)}>
+              <Button
+                variant="primary-v2"
+                onClick={() => downloadImage(image.url)}
+              >
                 Download image!
               </Button>
             </Stack>
@@ -41,7 +46,10 @@ export const GenerateImage = (props: Props) => {
   };
   const handleSubmit = async () => {
     setImages([]);
-    const request = await chatGPTResquestImage(ImagePrompt(input), 10);
+    const request = await chatGPTResquestImage(
+      ImagePrompt(input),
+      NUMBER_OF_IMAGE_GENERATED
+    );
     if (request.data) {
       setImages(request.data);
     }
