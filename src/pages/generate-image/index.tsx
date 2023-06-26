@@ -11,7 +11,7 @@ const GenerateDocumentPage: NextPageWithLayout = () => {
     <>
       <SEO
         data={{
-          title: 'Generate Document',
+          title: 'Generate Images',
           description:
             'Help you have all the necessary knowledge to become a Fresher NextJS!',
           url: '',

@@ -44,6 +44,7 @@ const PopoverNavigation = ({ options, title }: PopoverNavigationProps) => {
       >
         {options.map((item: any, idx: number) => (
           <VStack
+            key={idx}
             onClick={() => {
               router.push(item.path);
               onClose();

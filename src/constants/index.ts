@@ -10,3 +10,6 @@ export const PHONE_REG_EXP =
   /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
 
 export const PASSWORD_REGEXP = /^(?=(.*[a-z]){1})(?=(.*[A-Z]){1}).{8,}$/;
+
+export const NUMBER_QUESTIONS = 5;
+export const NUMBER_OF_IMAGE_GENERATED = 5;

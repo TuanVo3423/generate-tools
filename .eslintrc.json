@@ -26,11 +26,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "react-hooks"
-  ],
+  "plugins": ["react", "@typescript-eslint", "react-hooks"],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
@@ -41,10 +37,6 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/ban-ts-comment": "off",
-    "semi": [
-      "error",
-      "always"
-    ],
-    "prettier/prettier": true
+    "semi": ["error", "always"]
   }
 }
