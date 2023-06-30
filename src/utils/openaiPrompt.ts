@@ -1,8 +1,7 @@
-import { getQuestionById } from '@/features/GenerateDocument/data';
-export const NUMBER_OPTIONS = 4;
+import { NUMBER_QUESTIONS } from '@/constants';
 export const QuestionsPrompt = (description: string, name: string): string => {
   const prompt = `The new client project is called ${name}.The project description is: ${description}. 
-  List 5 questions necessary for writing a detailed and complete Project Specifications document for this project.
+  List ${NUMBER_QUESTIONS} questions necessary for writing a detailed and complete Project Specifications document for this project.
   Write in a clear and concise style.
     `;
   return prompt;
@@ -29,17 +28,7 @@ export const OptionsPrompt = (
       return null; // Không trả về gì nếu không có tùy chọn cho câu hỏi này
     })
     .filter((item) => item !== null); // Lọc bỏ các giá trị null khỏi mảng kết quả
-  console.log(QuestionAndAnswers);
-  // console.log('options:', options);
-  // const convertOptionsToString = options
-  //   .map((option) => `Question: ${option.content} Answer: ${option.options}`)
-  //   .join('\n');
-  // ${
-  //   options.length === 0
-  //     ? ''
-  //     : `There is a list of questions and answers describing project:
-  //      ${convertOptionsToString}.`
-  // }
+
   const prompt = `The project name is ${name}, described as ${description}. 
   ${
     QuestionAndAnswers[0] && QuestionAndAnswers[0].answer.length !== 0
