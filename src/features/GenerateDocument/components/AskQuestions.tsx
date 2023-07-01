@@ -1,24 +1,29 @@
+import { OptionsPrompt, chatGPTResquest } from '@/utils';
+import { OpenAIRequest } from '@/services/openai';
+import {
+  useGenerateQuestionWithAnswerPrompt,
+  useGenerateQuestionWithNoAnswerPrompt,
+} from '@/services/openai/prompt';
 import {
   Box,
   Button,
   Checkbox,
   CheckboxGroup,
+  Divider,
   Flex,
+  Skeleton,
   Stack,
   Text,
   VStack,
-  Skeleton,
-  Divider,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { chatGPTResquest, OptionsPrompt } from '@/utils';
-import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import {
   IOption,
   IQuestion,
-  replaceSpecialCharacters,
   isReadyForRequestGeneration,
+  replaceSpecialCharacters,
 } from '../data';
 
 type AskQuestionsProps = {
@@ -29,14 +34,76 @@ type AskQuestionsProps = {
 export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
   const { watch, setValue } = form;
   const [id, setId] = useState<string>();
+  const [test, setTest] = useState('');
+  const [questionTemp, setQuestionTemp] = useState('');
   const [isDisabledQuestion, setIsDisabledQuestion] = useState(false);
   const [currentOptions, setCurrentOptions] = useState<IOption[]>([]);
-  const [questions, options, description, name] = watch([
+  const [
+    questions,
+    options,
+    description,
+    name,
+    isRenderQuestionWithNoAnswer,
+    result,
+  ] = watch([
     'questions',
     'options',
     'description',
     'name',
+    'isRenderQuestionWithNoAnswer',
+    'result',
   ]);
+  console.log('options: ', options);
+  const { chatPrompt } = useGenerateQuestionWithNoAnswerPrompt();
+  const { chatPrompt: QAPrompt } = useGenerateQuestionWithAnswerPrompt();
+  const { chain } = OpenAIRequest({
+    prompt: chatPrompt,
+    handleStream: (token: string) => {
+      setTest((prev) => (prev += token));
+    },
+  });
+
+  const { chain: QAChain } = OpenAIRequest({
+    prompt: QAPrompt,
+    handleStream: (token: string) => {
+      setQuestionTemp((prev) => (prev += token));
+    },
+  });
+  useEffect(() => {
+    async function ChainRequest() {
+      const res = await chain.call({
+        name,
+        description,
+      });
+    }
+    if (isRenderQuestionWithNoAnswer) {
+      ChainRequest();
+    }
+  }, [isRenderQuestionWithNoAnswer]);
+  useEffect(() => {
+    const questionsAfterResponses = replaceSpecialCharacters(test).map(
+      (question: string) => ({
+        id: uuidv4(),
+        content: question,
+      })
+    );
+    setValue('questions', questionsAfterResponses);
+  }, [test]);
+
+  useEffect(() => {
+    const optionsAfterResponses = replaceSpecialCharacters(questionTemp).map(
+      (option: string) => ({
+        // id: uuidv4(),
+        questionId: id,
+        checked: false,
+        content: option,
+      })
+    );
+
+    // setValue('options', [...options, ...optionsAfterResponses]);
+    setCurrentOptions(optionsAfterResponses);
+    setIsDisabledQuestion(false);
+  }, [questionTemp]);
 
   const getQuestionById = (questionId?: string) => {
     if (questionId) {
@@ -44,6 +111,12 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
     }
     return '';
   };
+  // const getQuestionByContent = (content?: string) => {
+  //   if (content) {
+  //     return questions.find((item: IQuestion) => item.content === content);
+  //   }
+  //   return '';
+  // };
 
   const checkExistOptionAtCurrentQuestion = (questionId: string) => {
     if (options) {
@@ -57,6 +130,7 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
   };
 
   const handleOnChangeQuestions = async (id: string) => {
+    setQuestionTemp('');
     setId(id);
     const questionById = questions.filter(
       (question: IQuestion) => question.id === id
@@ -74,64 +148,41 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
       } else {
         setIsDisabledQuestion(true);
         setCurrentOptions([]);
-        const promptGetOptions = OptionsPrompt(
-          name,
-          description,
-          questionById[0].content,
-          options,
-          questions
-        );
-        const optionsRes = await chatGPTResquest([
-          { role: 'user', content: promptGetOptions },
-        ]);
-        if (optionsRes) {
-          const optionsAfterResponses = replaceSpecialCharacters(
-            optionsRes?.content
-          ).map((option: string) => ({
+        const res = await QAChain.call({
+          question: questionById[0].content,
+        });
+        const optionsAfterResponses = replaceSpecialCharacters(res.text).map(
+          (option: string) => ({
             id: uuidv4(),
             questionId: id,
             checked: false,
             content: option,
-          }));
-
-          setValue('options', [...options, ...optionsAfterResponses]);
-          setCurrentOptions(optionsAfterResponses);
-          setIsDisabledQuestion(false);
-        }
+          })
+        );
+        setValue('options', [...options, ...optionsAfterResponses]);
       }
     }
     // first time
     else {
       setIsDisabledQuestion(true);
-      const promptGetOptions = OptionsPrompt(
-        name,
-        description,
-        questionById[0].content,
-        options,
-        questions
-      );
-      const optionsRes = await chatGPTResquest([
-        { role: 'user', content: promptGetOptions },
-      ]);
-      if (optionsRes) {
-        const optionsAfterResponses = replaceSpecialCharacters(
-          optionsRes?.content
-        ).map((option: string) => ({
+      const res = await QAChain.call({
+        question: questionById[0].content,
+      });
+      const optionsAfterResponses = replaceSpecialCharacters(res.text).map(
+        (option: string) => ({
           id: uuidv4(),
           questionId: id,
           checked: false,
           content: option,
-        }));
-        setValue('options', [...options, ...optionsAfterResponses]);
-        setCurrentOptions(optionsAfterResponses);
-        setIsDisabledQuestion(false);
-      }
+        })
+      );
+      setValue('options', [...options, ...optionsAfterResponses]);
     }
   };
 
-  const handleOnChangeOptions = (optionId: string) => {
+  const handleOnChangeOptions = (optionContent: string) => {
     const optionsChanged = options.map((option: IOption) => {
-      if (option.id === optionId) {
+      if (option.content === optionContent) {
         return {
           ...option,
           checked: !option.checked,
@@ -215,10 +266,10 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
                     borderRadius="6px"
                   >
                     <Checkbox
-                      key={option.id}
-                      onChange={() => handleOnChangeOptions(option.id)}
+                      key={option.content}
+                      onChange={() => handleOnChangeOptions(option.content)}
                       isChecked={option.checked}
-                      value={option.id}
+                      value={option.content}
                     >
                       {idx + 1}: {option.content}
                     </Checkbox>

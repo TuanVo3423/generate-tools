@@ -2,11 +2,12 @@ import * as Yup from 'yup';
 import { UseFormReturn } from 'react-hook-form';
 import { DocumentPrompt } from '@/utils/openaiPrompt';
 import { chatGPTResquest } from '@/utils/openAIRequest';
+
 import MarkdownIt from 'markdown-it';
 
 export interface IOption {
-  id: string;
-  questionId: string;
+  id?: string;
+  questionId?: string;
   checked: boolean;
   content: string;
 }
@@ -22,6 +23,8 @@ export interface IDefaultValue {
   options: Array<IOption>;
   step: string;
   htmlDocument: string;
+  result: string;
+  isRenderQuestionWithNoAnswer: boolean;
 }
 
 export const DefaultValue: IDefaultValue = {
@@ -31,6 +34,8 @@ export const DefaultValue: IDefaultValue = {
   options: [],
   htmlDocument: '',
   step: 'askName',
+  result: '',
+  isRenderQuestionWithNoAnswer: false,
 };
 
 export const schema = Yup.object({});
@@ -42,8 +47,9 @@ export const handleSubmitForm = async ({
   values: IDefaultValue;
   form: UseFormReturn<any>;
 }) => {
-  const { step, description, name, options, questions } = values;
+  const { step, description, name, options, questions, result } = values;
   const { setValue } = form;
+
   if (step === 'generateDocument') {
     const optionsObject = questions.map((question) => {
       const matchingOptions = options.filter(
