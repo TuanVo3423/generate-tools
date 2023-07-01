@@ -1,19 +1,72 @@
-import { Button, Flex, HStack, Input, VStack } from '@chakra-ui/react';
-import { useState } from 'react';
+import { OpenAIRequest } from '@/services/openai';
+import { useGenerateQuestionWithNoAnswerPrompt } from '@/services/openai/prompt';
+import { Button, Flex, HStack, Input, Text, VStack } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { ReceiveContent, ReplyContent } from './ChatMessage';
-import { chatGPTResquest, QuestionsPrompt } from '@/utils';
-import { v4 as uuidv4 } from 'uuid';
+import {
+  ChatPromptTemplate,
+  HumanMessagePromptTemplate,
+  SystemMessagePromptTemplate,
+} from 'langchain/prompts';
+import { LLMChain } from 'langchain/chains';
+import { OpenAI } from 'langchain/llms/openai';
 import { replaceSpecialCharacters } from '../data';
+import { v4 as uuidv4 } from 'uuid';
 
 type AskNameProps = {
   form: UseFormReturn<any>;
 };
 
+const chat = new OpenAI({
+  openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  temperature: 0.3,
+  // streaming: true,
+  modelName: 'gpt-3.5-turbo',
+});
+const chatPrompt = ChatPromptTemplate.fromPromptMessages([
+  SystemMessagePromptTemplate.fromTemplate(
+    'You are a helpful assistant that translates {input_language} to {output_language}.'
+  ),
+  HumanMessagePromptTemplate.fromTemplate('{text}'),
+]);
+const chainB = new LLMChain({
+  prompt: chatPrompt,
+  llm: chat,
+});
+
 export const AskName = ({ form }: AskNameProps) => {
-  const [inputText, setInputText] = useState<string>('');
+  const [test, setTest] = useState('');
   const { watch, setValue } = form;
-  const [name, description] = watch(['name', 'description']);
+  const [name, description, questions, result] = watch([
+    'name',
+    'description',
+    'questions',
+    'result',
+  ]);
+
+  // const { chatPrompt } = useGenerateQuestionWithNoAnswerPrompt();
+  // const [result, setResult] = useState<string>('');
+  // const { chain } = OpenAIRequest({
+  //   prompt: chatPrompt,
+  //   handleStream: (token: string) => {
+  //     // console.log('appendToken: ', appendToken);
+  //     setValue('result', result + token);
+  //     const questionsAfterResponses = replaceSpecialCharacters(result).map(
+  //       (question: string) => ({
+  //         id: uuidv4(),
+  //         content: question,
+  //       })
+  //     );
+  //     setValue('questions', questionsAfterResponses);
+  //   },
+  // });
+  // useEffect(() => {
+  //   console.log(result);
+  // }, [result]);
+
+  const [inputText, setInputText] = useState<string>('');
+
   const isFirstQuestion = !name && !description;
 
   const handleOnSend = () => {
@@ -25,23 +78,9 @@ export const AskName = ({ form }: AskNameProps) => {
       setInputText('');
     }
   };
-
   const handleGotoAnswerQuestions = async () => {
-    console.log('handleGotoAnswerQuestions');
     setValue('step', 'askQuestions');
-    const promptGetQuestions = QuestionsPrompt(description, name);
-    const questions = await chatGPTResquest([
-      { role: 'user', content: promptGetQuestions },
-    ]);
-    if (questions) {
-      const questionsAfterResponses = replaceSpecialCharacters(
-        questions?.content
-      ).map((question: string) => ({
-        id: uuidv4(),
-        content: question,
-      }));
-      setValue('questions', questionsAfterResponses);
-    }
+    setValue('isRenderQuestionWithNoAnswer', true);
   };
 
   return (
@@ -64,12 +103,17 @@ export const AskName = ({ form }: AskNameProps) => {
               Specifications Document for ${name}`}
           </ReceiveContent>
         )}
+        <Text>
+          {questions.map((item: any) => (
+            <Text>{item.content}</Text>
+          ))}
+        </Text>
       </VStack>
       <HStack justify="center">
         {!description && (
           <>
             <Input
-              onKeyDown={(e) => console.log(e.keyCode === 13 && handleOnSend())}
+              onKeyDown={(e) => e.keyCode === 13 && handleOnSend()}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
             />

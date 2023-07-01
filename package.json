@@ -42,7 +42,7 @@
     "framer-motion": "^10.10.0",
     "i18next": "^22.4.14",
     "immer": "^9.0.21",
-    "langchain": "^0.0.97",
+    "langchain": "^0.0.100",
     "lodash": "^4.17.21",
     "markdown-it": "^13.0.1",
     "mermaid": "^10.1.0",

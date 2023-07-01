@@ -34,7 +34,13 @@ export const GenerateDocument = () => {
   if (step === 'generateDocument') return <GenerateDocumentComp form={form} />;
 
   return (
-    <Box w="full" h="full">
+    <Box
+      onSubmit={handleSubmit(onSubmit)}
+      onKeyDown={(e: any) => e.keyCode === 13 && e.preventDefault()}
+      as="form"
+      w="full"
+      h="full"
+    >
       {renderApp()}
     </Box>
   );
