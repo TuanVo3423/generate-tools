@@ -1,7 +1,12 @@
-import { Button, HStack, Skeleton, Stack } from '@chakra-ui/react';
+import { OpenAIRequest } from '@/services/openai';
+import { useGenerateDocumentPrompt } from '@/services/openai/prompt';
+import { Button, HStack, Stack } from '@chakra-ui/react';
 import { Editor } from '@tinymce/tinymce-react';
-import { useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
+import { convertOptionToString } from '../data';
+import { movePage } from '@/motion';
+import { motion } from 'framer-motion';
 
 type GenerateDocumentCompProps = {
   form: UseFormReturn<any>;
@@ -9,13 +14,40 @@ type GenerateDocumentCompProps = {
 
 const GenerateDocumentComp = ({ form }: GenerateDocumentCompProps) => {
   const { watch } = form;
-  const [htmlDocument] = watch(['htmlDocument']);
+  const [name, description, options, questions] = watch([
+    'name',
+    'description',
+    'options',
+    'questions',
+  ]);
+  const [documentText, setDocumentText] = useState('');
+
+  const { DocumentChain } = useMemo(() => {
+    const { chatPrompt: DocumentPrompt } = useGenerateDocumentPrompt();
+    const { chain: DocumentChain } = OpenAIRequest({
+      prompt: DocumentPrompt,
+      handleStream: (token: string) => {
+        setDocumentText((prev) => (prev += token));
+      },
+    });
+
+    return { DocumentChain };
+  }, []);
+  useEffect(() => {
+    async function Render() {
+      await DocumentChain._call({
+        name,
+        description,
+        convertOptionsToString: convertOptionToString(options, questions),
+      });
+    }
+    Render();
+  }, [DocumentChain]);
 
   const init = {
     height: 'calc(100vh - 121px)',
     menubar: true,
     statusbar: false,
-    // promotion: true,
     plugins: [
       'advlist',
       'autolink',
@@ -44,32 +76,19 @@ const GenerateDocumentComp = ({ form }: GenerateDocumentCompProps) => {
       'removeformat | help',
     content_style:
       'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-    text_patterns: [
-      { start: '*', end: '*', format: 'italic' },
-      { start: '**', end: '**', format: 'bold' },
-      { start: '# ', format: 'h1' },
-      { start: '##', format: 'h2' },
-      { start: '###', format: 'h3' },
-      { start: '####', format: 'h4' },
-      { start: '#####', format: 'h5' },
-      { start: '######', format: 'h6' },
-    ],
   };
+
   const editorRef = useRef(null);
 
   return (
-    <Stack gap="10px">
-      {htmlDocument ? (
-        <Editor
-          apiKey="3i24ep9fb80783h0vk72wzbl5te77104r1qvryzt3f23rqwf"
-          //@ts-ignore
-          onInit={(evt, editor) => (editorRef.current = editor)}
-          initialValue={htmlDocument}
-          init={init}
-        />
-      ) : (
-        <Skeleton w="100vw" h="calc(100vh - 121px)" />
-      )}
+    <Stack as={motion.div} {...movePage} gap="10px">
+      <Editor
+        apiKey="3i24ep9fb80783h0vk72wzbl5te77104r1qvryzt3f23rqwf"
+        //@ts-ignore
+        onInit={(evt, editor) => (editorRef.current = editor)}
+        init={init}
+        value={documentText}
+      />
 
       <HStack justify="center" align="center">
         <Button variant="primary-v2" maxW="200px">
