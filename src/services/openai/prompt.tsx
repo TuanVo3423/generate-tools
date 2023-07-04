@@ -20,7 +20,7 @@ export const useGenerateQuestionWithAnswerPrompt = () => {
   const chatPrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate('You are a project manager.'),
     HumanMessagePromptTemplate.fromTemplate(
-      'Provide list answers for question: ${question}.Write in a clear and concise style. Each answer corresponds to the number at the beginning.Go to the main content, first line is the answers!'
+      '{QASelectedPrompt}. Provide list answers for question: ${question}. Write in a clear and concise style. Each answer corresponds to the number at the beginning.Go to the main content, first line is the answers!'
     ),
   ]);
   return {
@@ -42,10 +42,27 @@ export const useGenerateDocumentPrompt = () => {
       6. Project Plan: Detail the timeline and milestones for the project, including the phases of development and testing.
       7. Budget: Provide a breakdown of the estimated costs for developing and delivering the software, including any resources or tools required.
       8. Conclusion: Summarize the key details and objectives of the software, and express confidence in delivering the project according to the specified objectives and requirements.
-     
-      The document should be written in a clear and concise style, formatted like a standard business proposal, and include any specific terminology or language you provide. The final document should be provided in a word processing format and be a minimum of 3 pages in length. The generated document is marked using markdown.`
+      This is software information I provide:
+      + Software name: {name}
+      + Description: {description}
+      +A list of questions with corresponding answers describing the characteristics of the application:
+      {convertOptionsToString}
+      The document should be written in a clear and concise style, formatted like a standard business proposal, and include any specific terminology or language you provide. Please generate an HTML code snippet that contains the content.The generated HTML code should be valid and well-formatted. Please exclude any content outside the <body> tag.`
     ),
   ]);
+  return {
+    chatPrompt,
+  };
+};
+
+export const useGenerateQuestionWithNoAnswerPromptV2 = () => {
+  const chatPrompt =
+    PromptTemplate.fromTemplate(`The following is a friendly conversation between a human and an AI. Write in a clear and concise style.Each answer corresponds to the number at the beginning. Go to the main content, first line is the answers!
+
+  Current conversation:
+  {chat_history}
+  Human: Provide list answers for question: {input}.
+  AI:`);
   return {
     chatPrompt,
   };
