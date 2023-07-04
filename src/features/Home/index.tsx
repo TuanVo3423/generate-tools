@@ -1,10 +1,12 @@
+import { movePage } from '@/motion';
 import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 
 const Home = () => {
   const router = useRouter();
   return (
-    <Box w="full" h="full">
+    <Box as={motion.div} {...movePage} w="full" h="full">
       <Box
         maxW="690px"
         mx="auto"
