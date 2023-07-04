@@ -12,9 +12,9 @@ import {
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
 import { useState } from 'react';
-type Props = {};
+// eslint-disable-next-line @typescript-eslint/ban-types
 
-export const GenerateImage = (props: Props) => {
+export const GenerateImage = () => {
   const [input, setInput] = useState('');
   const [images, setImages] = useState<any[]>([]);
   const downloadImage = (url: string) => {

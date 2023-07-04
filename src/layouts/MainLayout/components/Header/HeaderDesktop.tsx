@@ -1,9 +1,8 @@
 import { Box, Button, HStack, Image } from '@chakra-ui/react';
 import PopoverNavigation from './PopoverNavigation';
 import { routes } from './data';
-type HeaderDesktopProps = {};
 
-const HeaderDesktop = (props: HeaderDesktopProps) => {
+const HeaderDesktop = () => {
   return (
     <HStack
       display={['none', 'none', 'none', 'flex']}
@@ -14,7 +13,7 @@ const HeaderDesktop = (props: HeaderDesktopProps) => {
     >
       <HStack spacing="32px">
         <Box h="full">
-          <Image w="full" h="50px" src="/logo.png" />
+          <Image w="full" h="50px" src="/logo.png" alt="logo" />
         </Box>
         <HStack align="center" spacing="32px">
           {routes.map((route, idx: number) => (

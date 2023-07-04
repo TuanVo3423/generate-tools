@@ -15,7 +15,7 @@ export const RouteGuard = ({ children }: { children: any }) => {
 
   const { data } = useGetAuth({ enabled: !!profile });
   setProfile(data);
-  
+
   useEffect(() => {
     checkAuthorization(router.pathname);
 

@@ -35,7 +35,7 @@ export const OptionsPrompt = (
       ? 'There are some details which describing project:'
       : ''
   } 
-         ${QuestionAndAnswers.map((item: any, idx: number) => {
+         ${QuestionAndAnswers.map((item: any) => {
            if (item.answer.length !== 0) {
              return `${item.questionName} -> ${item.answer.map(
                (test: any) => test.content

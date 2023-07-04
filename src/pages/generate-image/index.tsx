@@ -1,5 +1,5 @@
 import { SEO } from '@/components';
-import { GenerateDocument, GenerateImage } from '@/features';
+import { GenerateImage } from '@/features';
 import { MainLayout } from '@/layouts';
 import { NextPageWithLayout } from '@/types';
 import { GetStaticProps } from 'next';

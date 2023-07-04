@@ -3,7 +3,7 @@ import { LocalStorage } from '@/services/localStorage';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import { Path, publicPaths } from './data';
-import _isEmpty from 'lodash/isEmpty';
+// import _isEmpty from 'lodash/isEmpty';
 import { useAuth } from '@/store';
 
 export const useAuthCheck = () => {
