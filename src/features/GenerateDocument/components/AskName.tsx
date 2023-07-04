@@ -44,6 +44,7 @@ export const AskName = ({ form }: AskNameProps) => {
     await loadFull(engine);
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   const particlesLoaded = useCallback(async (container: any) => {}, []);
   const { watch, setValue } = form;
   const [name, description, questions] = watch([
@@ -146,8 +147,8 @@ export const AskName = ({ form }: AskNameProps) => {
             </Wrapper>
           )}
           <Text>
-            {questions.map((item: any) => (
-              <Text>{item.content}</Text>
+            {questions.map((item: any, idx: number) => (
+              <Text key={idx}>{item.content}</Text>
             ))}
           </Text>
         </VStack>

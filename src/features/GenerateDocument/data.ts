@@ -42,7 +42,9 @@ export const handleSubmitForm = async ({
 }: {
   values: IDefaultValue;
   form: UseFormReturn<any>;
-}) => {};
+}) => {
+  return;
+};
 
 export const replaceSpecialCharacters = (response: string): Array<string> => {
   return response

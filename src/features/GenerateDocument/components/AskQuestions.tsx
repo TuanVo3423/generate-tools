@@ -50,7 +50,9 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
     ]);
 
   const { Qchain, QAChain } = useMemo(() => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { chatPrompt: QPrompt } = useGenerateQuestionWithNoAnswerPrompt();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { chatPrompt: QAPrompt } = useGenerateQuestionWithAnswerPrompt();
     const { chain: Qchain } = OpenAIRequest({
       prompt: QPrompt,

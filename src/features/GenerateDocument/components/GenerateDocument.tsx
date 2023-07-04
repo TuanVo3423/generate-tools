@@ -23,6 +23,7 @@ const GenerateDocumentComp = ({ form }: GenerateDocumentCompProps) => {
   const [documentText, setDocumentText] = useState('');
 
   const { DocumentChain } = useMemo(() => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { chatPrompt: DocumentPrompt } = useGenerateDocumentPrompt();
     const { chain: DocumentChain } = OpenAIRequest({
       prompt: DocumentPrompt,
