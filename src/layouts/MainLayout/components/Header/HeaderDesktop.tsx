@@ -1,8 +1,10 @@
 import { Box, Button, HStack, Image } from '@chakra-ui/react';
 import PopoverNavigation from './PopoverNavigation';
 import { routes } from './data';
+import { useRouter } from 'next/router';
 
 const HeaderDesktop = () => {
+  const router = useRouter();
   return (
     <HStack
       display={['none', 'none', 'none', 'flex']}
@@ -26,7 +28,11 @@ const HeaderDesktop = () => {
         </HStack>
       </HStack>
       <HStack>
-        <Button variant="primary-v2" w="fit-content">
+        <Button
+          onClick={() => router.push('/auth/sign-in')}
+          variant="primary-v2"
+          w="fit-content"
+        >
           Sign in
         </Button>
         <Button variant="secondary-v2" w="fit-content">
