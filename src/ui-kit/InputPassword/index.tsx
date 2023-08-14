@@ -48,9 +48,9 @@ export const InputPassword = ({
         />
         <InputRightElement>
           {show ? (
-            <ViewOffIcon onClick={handleClick} />
+            <ViewOffIcon onClick={handleClick} color="black" />
           ) : (
-            <ViewIcon onClick={handleClick} />
+            <ViewIcon onClick={handleClick} color="black" />
           )}
         </InputRightElement>
       </InputGroup>

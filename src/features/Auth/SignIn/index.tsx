@@ -1,7 +1,4 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { AuthLayout } from '../components';
+import { GoogleIcon } from '@/icons';
 import {
   Box,
   Button,
@@ -12,27 +9,57 @@ import {
   Link,
   Stack,
   Text,
+  useToast,
 } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { AuthLayout } from '../components';
 import { FormLogin } from './components';
 import { IUserLogin, schema_login } from './data';
-import { useRouter } from 'next/router';
-import { GoogleIcon } from '@/icons';
+import { useMutation } from 'react-query';
+import { signIn, signUp } from '@/api/auth';
+import { LocalStorage } from '@/services/localStorage';
+import { useAuth } from '@/store';
+import { PROJECT_AUTH_TOKEN } from '@/constants';
 
 type Props = {};
 
 export const SignIn = (props: Props) => {
+  const toast = useToast();
   const router = useRouter();
+  const setProfile = useAuth((state) => state.setProfile);
   const form = useForm<IUserLogin>({
     resolver: yupResolver(schema_login),
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
     },
   });
 
-  const handleLoginSubmit = async (value: IUserLogin) => {
-    console.log(value);
-  };
+  const { mutateAsync: handleLoginSubmit, isLoading } = useMutation(
+    async (data: IUserLogin) => {
+      const rest = await signIn(data);
+      return rest;
+    },
+    {
+      onSuccess: async (data: any) => {
+        LocalStorage.set(PROJECT_AUTH_TOKEN, data);
+        setProfile(data);
+        router.push('/generate-document');
+        toast({
+          description: data.message,
+          status: 'success',
+        });
+      },
+      onError: (error: any) => {
+        toast({
+          description: error.message,
+          status: 'error',
+        });
+      },
+    }
+  );
 
   return (
     <AuthLayout>

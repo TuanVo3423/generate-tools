@@ -1,10 +1,8 @@
 import { SEO } from '@/components';
-import { GenerateDocument } from '@/features';
 import { SignUp } from '@/features/Auth';
 import { NextPageWithLayout } from '@/types';
 import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { ReactElement } from 'react';
 
 const SignUpPgae: NextPageWithLayout = () => {
   return (

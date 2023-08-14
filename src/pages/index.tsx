@@ -6,6 +6,10 @@ import { Box } from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { ReactElement } from 'react';
+import { registerLicense } from '@syncfusion/ej2-base';
+registerLicense(
+  'ORg4AjUWIQA/Gnt2VVhhQ1Fac113W3xNYVF2R2F3e1RzdF9DZkwg0x1dQ19hSXtTcEVhlindceXFdQmy='
+);
 
 const HomePage: NextPageWithLayout = () => {
   return (

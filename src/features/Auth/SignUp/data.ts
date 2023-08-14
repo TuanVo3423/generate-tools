@@ -1,8 +1,10 @@
 import * as yup from 'yup';
 
-export interface IUserLogin {
+export interface IUserSignUp {
+  name: string;
   email: string;
   password: string;
+  confirm_password: string;
 }
 
 export interface UserInfo {
@@ -13,8 +15,9 @@ export interface UserInfo {
 
 // create schema object
 
-export const schema_login = yup
+export const schema_signup = yup
   .object({
+    name: yup.string().required('Please enter your username...'),
     email: yup
       .string()
       .email('must be a valid email')
@@ -23,5 +26,10 @@ export const schema_login = yup
       .string()
       .required('Please enter your password...')
       .min(6, 'Please enter your username at least 6 characters'),
+    confirm_password: yup
+      .string()
+      .required('Please enter your confirm password...')
+      .min(6, 'Please enter your password at least 6 characters')
+      .oneOf([yup.ref('password')], 'Passwords do not match'),
   })
   .required();

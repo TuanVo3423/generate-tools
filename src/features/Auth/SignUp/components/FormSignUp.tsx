@@ -1,13 +1,12 @@
+import { UseFormReturn } from 'react-hook-form';
 import { InputField, InputPassword } from '@/ui-kit';
 import { Button, Stack } from '@chakra-ui/react';
-import { UseFormReturn } from 'react-hook-form';
 
-type FormLoginProps = {
+type FormSignUpProps = {
   form: UseFormReturn<any>;
-  handleLogin: (value: any) => void;
+  handleSignUp: (value: any) => void;
 };
-
-export const FormLogin = ({ form, handleLogin }: FormLoginProps) => {
+export const FormSignUp = ({ form, handleSignUp }: FormSignUpProps) => {
   const {
     handleSubmit,
     formState: { isSubmitting },
@@ -18,8 +17,15 @@ export const FormLogin = ({ form, handleLogin }: FormLoginProps) => {
       justify="center"
       spacing={6}
       as="form"
-      onSubmit={handleSubmit(handleLogin)}
+      onSubmit={handleSubmit(handleSignUp)}
     >
+      <InputField
+        form={form}
+        label="Username"
+        name="name"
+        placeholder="Please enter your username..."
+        type="text"
+      />
       <InputField
         form={form}
         label="Email"
@@ -35,6 +41,14 @@ export const FormLogin = ({ form, handleLogin }: FormLoginProps) => {
         type="password"
       />
 
+      <InputPassword
+        form={form}
+        label="Confirm Password"
+        name="confirm_password"
+        placeholder="Please enter confirm password..."
+        type="password"
+      />
+
       <Button
         bg="rgba(76,53,222)"
         opacity={0.9}
@@ -45,7 +59,7 @@ export const FormLogin = ({ form, handleLogin }: FormLoginProps) => {
           opacity: 1,
         }}
       >
-        Login
+        SignUp
       </Button>
     </Stack>
   );

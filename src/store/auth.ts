@@ -10,8 +10,8 @@ type TData = {
 };
 
 interface IAuth {
-  profile: ResponseWithPagination<TData> | null;
-  setProfile: (data: ResponseWithPagination<TData>) => void;
+  profile: any | null;
+  setProfile: (data: any) => void;
   clearProfile: () => void;
 }
 

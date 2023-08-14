@@ -50,7 +50,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
       );
   };
   return (
-    <Flex minH="100vh" h="100vh" w="100%">
+    <Flex w="100%">
       <Stack
         pos="relative"
         justify="center"
@@ -59,7 +59,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
         bg={isRegisterPage ? '#111827' : '#4330c0'}
         spacing={10}
         w="30%"
-        h="full"
+        minH="100vh"
       >
         <Box pos="absolute" left={8} top={10}>
           <Image src="/logo.png" w="60px" h="60px" alt="logo" />
@@ -70,7 +70,7 @@ export const AuthLayout = ({ children }: AuthLayoutProps) => {
 
         {renderBottomLeft()}
       </Stack>
-      <Box w="70%" h="full">
+      <Box w="70%" minH="100vh">
         {children}
       </Box>
     </Flex>

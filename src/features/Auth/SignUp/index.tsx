@@ -12,24 +12,50 @@ import {
   Link,
   Stack,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { GoogleIcon } from '@/icons';
+import { FormSignUp } from './components';
+import { IUserSignUp, schema_signup } from './data';
+import { useMutation } from 'react-query';
+import { ISignUp, signUp } from '@/api/auth';
 
 type Props = {};
 
 export const SignUp = (props: Props) => {
+  const toast = useToast();
   const router = useRouter();
-  const form = useForm<any>({
+  const form = useForm<IUserSignUp>({
+    resolver: yupResolver(schema_signup),
     defaultValues: {
-      username: '',
+      name: '',
+      email: '',
       password: '',
+      confirm_password: '',
     },
   });
 
-  const handleLoginSubmit = async (value: any) => {
-    console.log(value);
-  };
+  const { mutateAsync: handleSignUpSubmit, isLoading } = useMutation(
+    async (data: ISignUp) => {
+      const rest = await signUp(data);
+      return rest;
+    },
+    {
+      onSuccess: async (data: any) => {
+        router.push('/');
+        toast({
+          description: data.message,
+          status: 'success',
+        });
+      },
+      onError: (error: any) => {
+        toast({
+          description: error.message,
+          status: 'error',
+        });
+      },
+    }
+  );
 
   return (
     <AuthLayout>
@@ -59,22 +85,22 @@ export const SignUp = (props: Props) => {
               >
                 Welcome back! 🙌
               </Text>
-              <Button variant="while-line-while">
+              {/* <Button variant="while-line-while">
                 <Icon as={GoogleIcon} mr={4} />
                 <Text fontWeight={400} fontSize="16px" lineHeight="16px">
                   Log in with google
                 </Text>
-              </Button>
-              <HStack w="full">
+              </Button> */}
+              {/* <HStack w="full">
                 <Divider bg="#e5e7eb" />
                 <Text flexShrink={0} color="rgba(107,114,128)">
                   Or continue with
                 </Text>
                 <Divider bg="#e5e7eb" />
-              </HStack>
+              </HStack> */}
             </Stack>
             {/* form */}
-            {/* <FormLogin form={form} handleLogin={handleLoginSubmit} /> */}
+            <FormSignUp form={form} handleSignUp={handleSignUpSubmit} />
             <Box textAlign="center">
               <Text color="rgba(107,114,128)">
                 By clicking &quot;Log in&quot; you agree to Durable&apos;s

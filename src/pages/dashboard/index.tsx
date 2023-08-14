@@ -1,10 +1,10 @@
 import { SEO } from '@/components';
-import { SignIn } from '@/features/Auth';
+import DashBoard from '@/features/DashBoard';
 import { NextPageWithLayout } from '@/types';
 import { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const SignInPage: NextPageWithLayout = () => {
+const DashBoardPage: NextPageWithLayout = () => {
   return (
     <>
       <SEO
@@ -16,12 +16,12 @@ const SignInPage: NextPageWithLayout = () => {
           thumbnailUrl: '',
         }}
       />
-      <SignIn />
+      <DashBoard />
     </>
   );
 };
 
-export default SignInPage;
+export default DashBoardPage;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
