@@ -1,13 +1,15 @@
 export enum Path {
+  HOME = '/',
   LOGIN = '/auth/sign-in',
   SIGN_UP = '/auth/sign-up',
-  CREATE_PROJECT = '/create-project',
   FORGOT_PASSWORD = '/auth/forgot-password',
+  // GENERATE_DOCUMENT = '/generate-document',
 }
 
 export const publicPaths = [
   Path.LOGIN,
   Path.SIGN_UP,
-  Path.CREATE_PROJECT,
+  Path.HOME,
   Path.FORGOT_PASSWORD,
+  // Path.GENERATE_DOCUMENT,
 ];

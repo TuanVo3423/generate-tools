@@ -69,7 +69,7 @@ const PopoverNavigation = ({ options, title }: PopoverNavigationProps) => {
                 bg="#1F2937"
                 borderRadius="12px"
               >
-                <Image src={item.icon} filter="invert(1)" />
+                <Image src={item.icon} filter="invert(1)" alt="icon" />
               </Flex>
               <VStack align="flex-start" flex={1}>
                 <Text color="white" fontWeight="700">

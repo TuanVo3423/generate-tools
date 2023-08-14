@@ -21,7 +21,11 @@ import { useState } from 'react';
 import { IOption, routes } from './data';
 import { fadeIn } from '@/motion';
 
-const HeaderMobile = () => {
+export type THeaderMobile = {
+  currentUser: any;
+};
+const HeaderMobile = ({ currentUser }: THeaderMobile) => {
+  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isOpenSubMenu, setIsOpenSubMenu] = useState(false);
   const [optionSeleted, setOptionSeleted] = useState<IOption[]>([]);
@@ -38,7 +42,7 @@ const HeaderMobile = () => {
     >
       <HStack w="full" justify="space-between" spacing="32px">
         <Box h="full">
-          <Image w="full" h="50px" src="/logo.png" />
+          <Image w="full" h="50px" src="/logo.png" alt="logo" />
         </Box>
         {isOpen ? (
           <Icon
@@ -111,7 +115,18 @@ const HeaderMobile = () => {
                   ))}
                 </VStack>
                 <HStack>
-                  <Button variant="primary-v2">Sign in</Button>
+                  {currentUser ? (
+                    <Button variant="primary-v2">Log out</Button>
+                  ) : (
+                    <Button
+                      variant="primary-v2"
+                      onClick={() => router.push('/auth/sign-in')}
+                      w="fit-content"
+                    >
+                      Sign in
+                    </Button>
+                  )}
+
                   <Button variant="secondary-v2">Build site</Button>
                 </HStack>
               </Stack>

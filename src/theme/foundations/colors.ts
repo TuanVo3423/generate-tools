@@ -3,6 +3,7 @@ export default {
   pri: {
     1: '#E8FD94',
     2: '#AEE317',
+    3: '#111827',
   },
   sec: {
     1: '#DFCEFD',

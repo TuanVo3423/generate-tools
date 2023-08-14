@@ -13,6 +13,7 @@ export type AppPropsWithLayout = AppProps & {
 export enum ERROR {
   UNAUTHORIZED = 401,
   FORBIDDEN = 403,
+  NOT_FOUND = 404,
 }
 
 export enum QUESTION_TYPE {

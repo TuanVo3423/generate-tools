@@ -2,7 +2,7 @@ export interface ISignUp {
   email: string;
   name: string;
   password: string;
-  guestId?: string;
+  confirmPassword: string;
 }
 
 export interface ISignIn {

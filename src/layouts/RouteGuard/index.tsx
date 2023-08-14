@@ -1,24 +1,21 @@
+import { useGetAuth } from '@/api/auth';
 import { PROJECT_AUTH_TOKEN } from '@/constants';
 import { LocalStorage } from '@/services/localStorage';
 import { useRouter } from 'next/router';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Path, publicPaths } from './data';
 import { useAuthCheck } from './hook';
-import { useGetAuth } from '@/api/auth';
-import { useAuth } from '@/store';
 
 export const RouteGuard = ({ children }: { children: any }) => {
   const router = useRouter();
-  const profile = LocalStorage.get(PROJECT_AUTH_TOKEN);
+  const profile = LocalStorage.get(PROJECT_AUTH_TOKEN); // null
   const { checkAuthorization, authorized } = useAuthCheck();
-  const setProfile = useAuth((state) => state.setProfile);
 
-  const { data } = useGetAuth({ enabled: !!profile });
-  setProfile(data);
+  // nay kh co profile -> thi co ra dao
+  useGetAuth({ enabled: !!profile });
 
   useEffect(() => {
     checkAuthorization(router.pathname);
-
     router.events.on('routeChangeComplete', checkAuthorization);
     return () => {
       router.events.off('routeChangeComplete', checkAuthorization);

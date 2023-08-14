@@ -28,6 +28,9 @@
   },
   "plugins": ["react", "@typescript-eslint", "react-hooks"],
   "rules": {
+    "@typescript-eslint/ban-types": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/prop-types": "off",
@@ -39,7 +42,7 @@
     "@typescript-eslint/ban-ts-comment": "off",
     "semi": ["error", "always"],
     "prettier/prettier": [
-      "error",
+      "off",
       {
         "endOfLine": "auto"
       }

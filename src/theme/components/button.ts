@@ -137,15 +137,14 @@ const Button: ComponentStyleConfig = {
     },
 
     'while-line-while': {
-      bg: 'transparent',
-      background: 'transparent',
-      border: '1px solid #B7B6BB',
+      bg: 'white',
+      background: 'white',
+      border: '1px solid rgba(209,213,219)',
       color: 'text.900',
 
       _hover: {
         bg: 'transparent',
         background: 'transparent',
-        border: '1px solid #141318',
       },
 
       _active: {

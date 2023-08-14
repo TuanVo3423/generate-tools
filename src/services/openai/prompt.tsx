@@ -8,7 +8,7 @@ export const useGenerateQuestionWithNoAnswerPrompt = () => {
   const chatPrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate('You are a project manager.'),
     HumanMessagePromptTemplate.fromTemplate(
-      'The new client project is called {name}.The project description is: {description}.List 5 questions necessary for writing a detailed and complete Project Specifications document for this project.Write in a clear and concise style.'
+      'The new client project is called {name}.The project description is: {description}.List 3 questions necessary for writing a detailed and complete Project Specifications document for this project.Write in a clear and concise style.'
     ),
   ]);
   return {

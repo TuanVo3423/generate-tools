@@ -1,3 +1,4 @@
+import { movePage } from '@/motion';
 import { OpenAIRequest } from '@/services/openai';
 import {
   useGenerateQuestionWithAnswerPrompt,
@@ -15,6 +16,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,8 +27,6 @@ import {
   isReadyForRequestGeneration,
   replaceSpecialCharacters,
 } from '../data';
-import { motion } from 'framer-motion';
-import { movePage } from '@/motion';
 
 type AskQuestionsProps = {
   form: UseFormReturn<any>;
@@ -40,6 +40,7 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
   const [questionToken, setQuestionToken] = useState('');
   const [optionToken, setOptionToken] = useState('');
   const [currentOptions, setCurrentOptions] = useState<IOption[]>([]);
+
   const [questions, options, description, name, isRenderQuestionWithNoAnswer] =
     watch([
       'questions',
@@ -59,11 +60,17 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
       handleStream: (token: string) => {
         setQuestionToken((prev) => (prev += token));
       },
+      handleStreamEnd(token) {
+        console.log(token);
+      },
     });
     const { chain: QAChain } = OpenAIRequest({
       prompt: QAPrompt,
       handleStream: (token: string) => {
         setOptionToken((prev) => (prev += token));
+      },
+      handleStreamEnd(token) {
+        console.log(token);
       },
     });
     return { Qchain, QAChain };
@@ -80,6 +87,7 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
     if (isRenderQuestionWithNoAnswer) {
       ChainRequest();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRenderQuestionWithNoAnswer]);
   // set token for question token
   useEffect(() => {
@@ -106,19 +114,27 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
           content: option,
         })
       );
+      console.log('optionsAfterResponses: ', optionsAfterResponses);
+      // optionsAfterResponses : ca dong token dc tao voi questionId -> map -> xem thu trong current co
       const correctResponse = optionsAfterResponses.map((item, idx: number) => {
-        const matchingItem = currentOptions.find((option) =>
-          item.content.includes(option.content)
+        const matchingItem = currentOptions.find(
+          (option) =>
+            item.content === option.content && option.questionId === id
         );
+        console.log('matchingItem: ', matchingItem);
         if (matchingItem) {
           return { ...item, checked: matchingItem.checked };
         }
         return item;
       });
 
+      // setCurrentOptions(correctResponse);
+      console.log('currentOptions:', currentOptions);
       setCurrentOptions(correctResponse);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionToken]);
+  console.log('currentOptions: ', currentOptions);
 
   const getQuestionById = (questionId?: string) => {
     if (questionId) {
@@ -205,9 +221,11 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
           };
         }
       });
+      console.log('optionsChanged: ', optionsChanged, optionId);
       setCurrentOptions(optionsChanged);
     }
   };
+  console.log('options: ', options);
 
   return (
     <Stack as={motion.div} {...movePage} justify="center" h="full">

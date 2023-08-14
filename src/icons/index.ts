@@ -45,3 +45,5 @@ export * from './issue-check';
 export * from './issue-warning';
 export * from './spark';
 export * from './menu';
+export * from './auth-login';
+export * from './auth-computer';
