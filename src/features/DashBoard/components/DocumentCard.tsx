@@ -11,6 +11,8 @@ import {
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
 import { PopoverComp } from '@/components/Popover';
+import format from 'date-fns/format';
+import { ReadMore } from './ReadMore';
 // import format from 'date-fns/format';
 
 export type TDocumentCardProps = {
@@ -19,6 +21,7 @@ export type TDocumentCardProps = {
   description_project: string;
   content: string;
   user_id: any;
+  createdAt: any;
 };
 
 export const DocumentCard = ({
@@ -27,6 +30,7 @@ export const DocumentCard = ({
   description_project,
   name_project,
   user_id,
+  createdAt,
 }: TDocumentCardProps) => {
   const router = useRouter();
 
@@ -52,23 +56,23 @@ export const DocumentCard = ({
           <PopoverComp document_id={_id} />
         </HStack>
         <Flex>
-          <Heading color="#f1f0ff" mr="auto" display="inline-block" size="md">
+          <Heading mr="auto" display="inline-block" size="md">
             {name_project}
           </Heading>
-          <Heading ml="auto" display="inline-block" size="md">
-            {/* {new Date(selection.createdAt)} */}
+          <Heading color="#f1f0ff" ml="auto" size="md" display="inline-block">
+            {/* {new Date(createdAt)} */}
+            {format(new Date(createdAt), 'dd MMM yyyy')}
           </Heading>
         </Flex>
       </CardHeader>
       <CardBody>
-        <Text
-          color="#f1f0ff"
-          fontSize="md"
-          lineHeight="normal"
-          fontWeight="400"
-        >
-          {description_project}
-        </Text>
+        <ReadMore
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          numberOfChars={200}
+          text={description_project}
+        />
       </CardBody>
     </Card>
   );

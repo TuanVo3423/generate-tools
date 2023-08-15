@@ -65,6 +65,7 @@
     "react-markdown": "^8.0.7",
     "react-particles": "^2.10.1",
     "react-query": "^3.39.3",
+    "react-textarea-autosize": "^8.5.2",
     "react-typist": "^2.0.5",
     "reactflow": "^11.7.0",
     "recharts": "^2.5.0",

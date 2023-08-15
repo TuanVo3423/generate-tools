@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import '../theme/global.css';
 import { RouteGuard } from '@/layouts';
+import { GlobalLoading } from '@/components/Loading';
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page);
@@ -31,6 +32,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
           // @ts-ignore
           <RouteGuard>
             <Component {...pageProps} />
+            <GlobalLoading />
           </RouteGuard>
         )}
 

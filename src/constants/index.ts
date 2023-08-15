@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 
-export const PROJECT_AUTH_TOKEN = 'SPARK_PLAN_AUTH_TOKEN';
+export const PROJECT_AUTH_TOKEN = 'GENERATE_TOOL_AUTH_TOKEN';
 export const FORMAT_DATE = 'DD/MM/YYYY';
 
 export const EMAIL_REG_EXP =
@@ -12,4 +12,4 @@ export const PHONE_REG_EXP =
 export const PASSWORD_REGEXP = /^(?=(.*[a-z]){1})(?=(.*[A-Z]){1}).{8,}$/;
 
 export const NUMBER_QUESTIONS = 5;
-export const NUMBER_OF_IMAGE_GENERATED = 5;
+export const NUMBER_OF_IMAGE_GENERATED = 3;

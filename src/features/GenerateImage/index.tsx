@@ -15,6 +15,7 @@ import { useState } from 'react';
 // eslint-disable-next-line @typescript-eslint/ban-types
 
 export const GenerateImage = () => {
+  const [flag, setFlag] = useState(true);
   const [input, setInput] = useState('');
   const [images, setImages] = useState<any[]>([]);
   const downloadImage = (url: string) => {
@@ -22,13 +23,19 @@ export const GenerateImage = () => {
   };
 
   const renderImage = () => {
-    if (images.length !== 0)
+    if (images.length !== 0 && !flag)
       return (
         <>
           {images.map((image, idx) => (
             <Stack key={idx}>
               <Box key={idx}>
-                <Image objectFit="cover" w="full" h="full" src={image.url} />
+                <Image
+                  objectFit="cover"
+                  w="full"
+                  h="full"
+                  src={image.url}
+                  alt="result"
+                />
               </Box>
               <Button
                 variant="primary-v2"
@@ -40,12 +47,15 @@ export const GenerateImage = () => {
           ))}
         </>
       );
-    return Array.from({ length: 3 }, (_, _idx) => (
-      <Skeleton key={_idx} h="400px" />
-    ));
+    if (images.length === 0 && !flag)
+      return Array.from({ length: 3 }, (_, _idx) => (
+        <Skeleton key={_idx} h="400px" />
+      ));
+    if (flag) return;
   };
   const handleSubmit = async () => {
     setImages([]);
+    setFlag(false);
     const request = await chatGPTResquestImage(
       ImagePrompt(input),
       NUMBER_OF_IMAGE_GENERATED
@@ -72,20 +82,6 @@ export const GenerateImage = () => {
       </Button>
       <SimpleGrid columns={3} spacing={4}>
         {renderImage()}
-        {/* {images.length !== 0
-          ? images.map((image, idx) => (
-              <Stack>
-                <Box key={idx}>
-                  <Image objectFit="cover" w="full" h="full" src={image.url} />
-                </Box>
-                <Button onClick={() => downloadImage(image.url)}>
-                  Download image!
-                </Button>
-              </Stack>
-            ))
-          : Array.from({ length: 3 }, (_, _idx) => (
-              <Skeleton key={_idx} h="400px" />
-            ))} */}
       </SimpleGrid>
     </Stack>
   );

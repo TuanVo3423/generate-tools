@@ -1,10 +1,10 @@
-import { Editor } from '@tinymce/tinymce-react';
-import React, { useRef, useState } from 'react';
-import { Box, Button, HStack, useToast } from '@chakra-ui/react';
-import { useMutation } from 'react-query';
 import { updateDocument } from '@/api/documents';
-import { useRouter } from 'next/router';
+import { Box, Button, HStack, useToast } from '@chakra-ui/react';
+import { Editor } from '@tinymce/tinymce-react';
 import { saveAs } from 'file-saver';
+import { useRouter } from 'next/router';
+import { useRef, useState } from 'react';
+import { useMutation } from 'react-query';
 // @ts-ignore
 import htmlDocx from 'html-docx-js/dist/html-docx';
 
@@ -87,10 +87,11 @@ const DocumentEditor = ({ content }: DocumentEditorProps) => {
     <Box>
       <Editor
         apiKey="azo95xq4zkspyisl301b05fqpgp94r6z2ps7babdj3micl1r"
-        //@ts-ignore
-        // onInit={(evt, editor) => (editorRef.current = editor)}
         disabled={!isEdit}
         init={init}
+        // onInit={(evt, editor) => {
+        //   console.log('123');
+        // }}
         value={documentText}
         onEditorChange={(newText) => {
           setDocumentText(newText);

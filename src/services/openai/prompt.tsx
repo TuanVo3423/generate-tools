@@ -4,11 +4,12 @@ import {
   PromptTemplate,
   SystemMessagePromptTemplate,
 } from 'langchain/prompts';
+import { NUMBER_QUESTIONS } from '@/constants';
 export const useGenerateQuestionWithNoAnswerPrompt = () => {
   const chatPrompt = ChatPromptTemplate.fromPromptMessages([
     SystemMessagePromptTemplate.fromTemplate('You are a project manager.'),
     HumanMessagePromptTemplate.fromTemplate(
-      'The new client project is called {name}.The project description is: {description}.List 3 questions necessary for writing a detailed and complete Project Specifications document for this project.Write in a clear and concise style.'
+      `The new client project is called {name}.The project description is: {description} (can be based on the above details).List ${NUMBER_QUESTIONS} questions necessary for writing a detailed and complete Project Specifications document for this project, delete question about timelines, milestones. Write in a clear and concise style.`
     ),
   ]);
   return {
@@ -40,8 +41,7 @@ export const useGenerateDocumentPrompt = () => {
       4. Non-functional Objectives: Outline the non-functional objectives of the software, such as performance or security requirements.
       5. Project Scope: Define the scope of the project, including any constraints or limitations that may impact the development or delivery of the software.
       6. Project Plan: Detail the timeline and milestones for the project, including the phases of development and testing.
-      7. Budget: Provide a breakdown of the estimated costs for developing and delivering the software, including any resources or tools required.
-      8. Conclusion: Summarize the key details and objectives of the software, and express confidence in delivering the project according to the specified objectives and requirements.
+      7. Conclusion: Summarize the key details and objectives of the software, and express confidence in delivering the project according to the specified objectives and requirements.
       This is software information I provide:
       + Software name: {name}
       + Description: {description}

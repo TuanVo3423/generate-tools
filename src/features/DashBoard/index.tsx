@@ -5,10 +5,12 @@ import Layout from './components/layout';
 import { useGetDocumentOfUser } from '@/api/auth';
 import { DocumentCard } from './components/DocumentCard';
 import { TDocumentCardProps } from './components/DocumentCard';
+import { useAuth } from '@/store';
 
 const DashBoard: NextPage = () => {
   const router = useRouter();
   const { data, isLoading } = useGetDocumentOfUser();
+  const currentUser = useAuth((state) => state.profile);
 
   return (
     <Layout>
@@ -17,13 +19,13 @@ const DashBoard: NextPage = () => {
 
         <Stack spacing={8}>
           <Heading size="lg" color="white">
-            Hi, Which function you want to use below?
+            {`Hi ${currentUser.name}! Which function you want to use below?`}
           </Heading>
           <Stack direction="row">
             <Button
               variant="primary-v2"
               maxW="200px"
-              onClick={() => router.push('/generate')}
+              onClick={() => router.push('/generate-document')}
             >
               Generate document
             </Button>
@@ -49,6 +51,7 @@ const DashBoard: NextPage = () => {
                       description_project={item.description_project}
                       name_project={item.name_project}
                       user_id={item.user_id}
+                      createdAt={item.created_at}
                       key={item._id}
                     />
                   ))}
