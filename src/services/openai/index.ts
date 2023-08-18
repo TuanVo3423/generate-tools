@@ -6,6 +6,7 @@ import { PromptTemplate } from 'langchain/prompts';
 interface IOpenAIRequest {
   handleStream: (token: string) => void;
   handleStreamEnd: (token: string) => void;
+  handleStreamStart?: () => void;
   prompt?: any;
   OpenAIParams?: any;
 }
@@ -13,6 +14,7 @@ interface IOpenAIRequest {
 export const OpenAIRequest = ({
   handleStream,
   handleStreamEnd,
+  handleStreamStart,
   prompt,
   OpenAIParams,
 }: IOpenAIRequest) => {
@@ -28,6 +30,12 @@ export const OpenAIRequest = ({
         },
         handleLLMEnd(token: string) {
           handleStreamEnd(token);
+        },
+        handleLLMStart() {
+          if (handleStreamStart) {
+            handleStreamStart();
+          }
+          return;
         },
       },
     ],

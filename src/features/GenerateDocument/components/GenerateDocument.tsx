@@ -12,14 +12,16 @@ import { convertOptionToString } from '../data';
 import { saveAs } from 'file-saver';
 // @ts-ignore
 import htmlDocx from 'html-docx-js/dist/html-docx';
+import { useGlobalLoading } from '@/store';
+import { useRouter } from 'next/router';
 
 type GenerateDocumentCompProps = {
   form: UseFormReturn<any>;
 };
 
 const GenerateDocumentComp = ({ form }: GenerateDocumentCompProps) => {
+  const router = useRouter();
   const { watch, setValue, formState } = form;
-  const [isEdit, setIsEdit] = useState(false);
   const [name, description, options, questions] = watch([
     'name',
     'description',
@@ -29,6 +31,7 @@ const GenerateDocumentComp = ({ form }: GenerateDocumentCompProps) => {
   const [documentText, setDocumentText] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
   const toast = useToast();
+  const closeLoading = useGlobalLoading((state) => state.closeLoading);
 
   const { DocumentChain } = useMemo(() => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -41,6 +44,9 @@ const GenerateDocumentComp = ({ form }: GenerateDocumentCompProps) => {
       },
       handleStreamEnd: (token: string) => {
         setIsDisabled(false);
+      },
+      handleStreamStart() {
+        closeLoading();
       },
     });
 
@@ -61,6 +67,7 @@ const GenerateDocumentComp = ({ form }: GenerateDocumentCompProps) => {
         description: data.message,
         status: 'success',
       });
+      router.push('/dashboard');
     },
     onError: (error: any) => {
       toast({
@@ -132,18 +139,22 @@ const GenerateDocumentComp = ({ form }: GenerateDocumentCompProps) => {
         init={init}
         disabled={isDisabled}
         value={documentText}
-        onEditorChange={(newText) => {
-          setDocumentText(newText);
-        }}
       />
 
       <HStack justify="center" align="center">
-        <Button onClick={handleExportToWord} variant="primary-v2" maxW="200px">
+        <Button
+          isDisabled={isDisabled}
+          onClick={handleExportToWord}
+          variant="primary-v2"
+          maxW="200px"
+        >
           Export to word
         </Button>
         <Button
           isDisabled={isDisabled}
-          onClick={() => handleSaveDocumentation.mutate()}
+          onClick={() => {
+            handleSaveDocumentation.mutate();
+          }}
           variant="secondary-v2"
           maxW="200px"
         >

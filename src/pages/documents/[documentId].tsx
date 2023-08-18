@@ -1,4 +1,5 @@
 import { useGetDocument } from '@/api/documents';
+import { useGlobalLoading } from '@/store';
 import { Text } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -12,16 +13,19 @@ type Props = {};
 const Document = (props: Props) => {
   const router = useRouter();
   const documentId = router.query.documentId;
+  const toggleLoading = useGlobalLoading((state) => state.toggleLoading);
+  const closeLoading = useGlobalLoading((state) => state.closeLoading);
   const { data, isLoading } = useGetDocument(documentId as string, {
-    // The query will not execute until the userId exists
-    // onSuccess: async (data: any) => {},
     enabled: !!documentId,
   });
 
   //   get document by id
   // show here
-  if (isLoading) return <Text>Loading</Text>;
-  return <DocumentEditor content={data.content} />;
+  if (isLoading) return toggleLoading('Loading...');
+  if (!isLoading) {
+    closeLoading();
+    return <DocumentEditor content={data.content} />;
+  }
 };
 
 export default Document;

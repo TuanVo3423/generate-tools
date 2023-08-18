@@ -3,7 +3,6 @@ import { DeleteIcon } from '@chakra-ui/icons';
 import {
   Button,
   ButtonGroup,
-  Icon,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -32,7 +31,9 @@ export function PopoverComp({ document_id }: TPopoverComp) {
     },
     {
       onSuccess: async (data: any) => {
-        queryClient.invalidateQueries({ queryKey: ['getDocumentOfUser'] });
+        queryClient.invalidateQueries({
+          queryKey: ['getDocumentOfUser'],
+        });
         toast({
           description: data.message,
           status: 'success',
@@ -43,19 +44,20 @@ export function PopoverComp({ document_id }: TPopoverComp) {
 
   return (
     <>
-      <DeleteIcon
-        onClick={(e) => {
-          e.stopPropagation();
-          onToggle();
-        }}
-      />
       <Popover
-        returnFocusOnClose={false}
         isOpen={isOpen}
         onClose={onClose}
         placement="right"
-        closeOnBlur={false}
+        closeOnBlur={true}
       >
+        <PopoverTrigger>
+          <DeleteIcon
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggle();
+            }}
+          />
+        </PopoverTrigger>
         <PopoverContent
           onClick={(e) => {
             e.stopPropagation();
@@ -69,7 +71,9 @@ export function PopoverComp({ document_id }: TPopoverComp) {
           </PopoverBody>
           <PopoverFooter display="flex" justifyContent="flex-end">
             <ButtonGroup size="sm">
-              <Button variant="outline">No</Button>
+              <Button onClick={onClose} variant="outline">
+                No
+              </Button>
               <Button
                 variant="secondary-v2"
                 onClick={() => handleDelete.mutate()}

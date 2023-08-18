@@ -1,3 +1,4 @@
+import { PROJECT_AUTH_TOKEN } from '@/constants';
 import { useAuth } from '@/store';
 import {
   Avatar,
@@ -9,19 +10,19 @@ import {
   MenuGroup,
   MenuItem,
   MenuList,
+  useToast,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 
 const Header = () => {
   const { reload } = useRouter();
-  const route = useRouter();
-  const [logoutSuccess, setLogoutSuccess] = useState(false);
+  const toast = useToast();
   const currentUser = useAuth((state) => state.profile);
-
   const handleLogout = () => {
-    null;
+    localStorage.removeItem(PROJECT_AUTH_TOKEN);
+    toast({ description: 'Logout success', status: 'success' });
+    reload();
   };
 
   return (

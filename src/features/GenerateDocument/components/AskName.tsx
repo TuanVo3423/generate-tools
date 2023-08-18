@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import Particles from 'react-particles';
 import Typist from 'react-typist';
@@ -24,6 +24,7 @@ import { loadFull } from 'tsparticles';
 import { particleConfig } from '../data';
 import { ReceiveContent, ReplyContent } from './ChatMessage';
 import { motion } from 'framer-motion';
+import ResizeTextarea from 'react-textarea-autosize';
 
 const Wrapper = styled(Typist)`
   .Cursor {
@@ -52,6 +53,7 @@ export const AskName = ({ form }: AskNameProps) => {
     'description',
     'questions',
   ]);
+  const descriptionInputRef = useRef(null);
 
   const [inputText, setInputText] = useState<string>('');
 
@@ -90,16 +92,23 @@ export const AskName = ({ form }: AskNameProps) => {
           </InputRightElement>
         </InputGroup>
       );
-    if (name && !description)
+    if (name && !description) {
+      // descriptionInputRef.current.focus();
       return (
         <InputGroup>
           <Textarea
+            minH="100px"
+            overflow="hidden"
+            as={ResizeTextarea}
+            ref={descriptionInputRef}
             color="white"
             bg="rgba(136, 135, 143, 0.7)"
             border="none"
             onKeyDown={(e) => e.keyCode === 13 && handleOnSend()}
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
+            onChange={(e) => {
+              setInputText(e.target.value);
+            }}
           />
           <InputRightElement>
             <Icon
@@ -112,6 +121,7 @@ export const AskName = ({ form }: AskNameProps) => {
           </InputRightElement>
         </InputGroup>
       );
+    }
   };
 
   const handleGotoAnswerQuestions = async () => {

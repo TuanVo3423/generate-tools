@@ -27,6 +27,7 @@ import {
   isReadyForRequestGeneration,
   replaceSpecialCharacters,
 } from '../data';
+import { useGlobalLoading } from '@/store';
 
 type AskQuestionsProps = {
   form: UseFormReturn<any>;
@@ -49,6 +50,7 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
       'name',
       'isRenderQuestionWithNoAnswer',
     ]);
+  const toggleLoading = useGlobalLoading((state) => state.toggleLoading);
 
   const { Qchain, QAChain } = useMemo(() => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -114,14 +116,14 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
           content: option,
         })
       );
-      console.log('optionsAfterResponses: ', optionsAfterResponses);
+      // console.log('optionsAfterResponses: ', optionsAfterResponses);
       // optionsAfterResponses : ca dong token dc tao voi questionId -> map -> xem thu trong current co
       const correctResponse = optionsAfterResponses.map((item, idx: number) => {
         const matchingItem = currentOptions.find(
           (option) =>
             item.content === option.content && option.questionId === id
         );
-        console.log('matchingItem: ', matchingItem);
+        // console.log('matchingItem: ', matchingItem);
         if (matchingItem) {
           return { ...item, checked: matchingItem.checked };
         }
@@ -129,12 +131,12 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
       });
 
       // setCurrentOptions(correctResponse);
-      console.log('currentOptions:', currentOptions);
+      // console.log('currentOptions:', currentOptions);
       setCurrentOptions(correctResponse);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionToken]);
-  console.log('currentOptions: ', currentOptions);
+  // console.log('currentOptions: ', currentOptions);
 
   const getQuestionById = (questionId?: string) => {
     if (questionId) {
@@ -221,11 +223,11 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
           };
         }
       });
-      console.log('optionsChanged: ', optionsChanged, optionId);
+      // console.log('optionsChanged: ', optionsChanged, optionId);
       setCurrentOptions(optionsChanged);
     }
   };
-  console.log('options: ', options);
+  // console.log('options: ', options);
 
   return (
     <Stack as={motion.div} {...movePage} justify="center" h="full">
@@ -338,6 +340,7 @@ export const AskQuestions = ({ form, handleSubmit }: AskQuestionsProps) => {
             isReadyForRequestGeneration(questions, options) ? false : true
           }
           onClick={() => {
+            // toggleLoading('Loading...');
             setValue('step', 'generateDocument');
             handleSubmit();
           }}

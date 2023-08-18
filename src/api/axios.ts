@@ -103,18 +103,19 @@ request.interceptors.response.use(
     const tokenCookie = getCookie('Authorization');
     switch (status) {
       case ERROR.UNAUTHORIZED: {
-        if (!LocalStorage.get(PROJECT_AUTH_TOKEN)) {
-          clearLocalStorageAndGotoLogin();
-          return;
-        }
-        if (LocalStorage.get(PROJECT_AUTH_TOKEN) && tokenCookie) {
-          clearLocalStorageAndGotoLogin();
-          return;
-        }
-        if (!tokenCookie) {
-          clearLocalStorageAndGotoLogin();
-          return;
-        }
+        clearLocalStorageAndGotoLogin();
+        // if (!LocalStorage.get(PROJECT_AUTH_TOKEN)) {
+        //   clearLocalStorageAndGotoLogin();
+        //   return;
+        // }
+        // if (LocalStorage.get(PROJECT_AUTH_TOKEN) && tokenCookie) {
+        //   clearLocalStorageAndGotoLogin();
+        //   return;
+        // }
+        // if (!tokenCookie) {
+        //   clearLocalStorageAndGotoLogin();
+        //   return;
+        // }
         // let token;
 
         // if (isFetchingNewToken) {
